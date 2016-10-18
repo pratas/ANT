@@ -46,7 +46,7 @@ fi
 # RUN TOP
 if [[ "$RUN_TOP" -eq "1" ]]; then
   rm -f TOP;
-  size=`ls -la out*.fa | wc -l`;
+  size=`ls -la data/out*.fa | wc -l`;
   for((x=1 ; x<=$size; ++x));
     do
     bytes=`./GeCo -v -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 20 -g 0.9 data/out$x.fa | grep "Total bytes" | awk '{ print $16; }'`;
