@@ -1,7 +1,9 @@
 #!/bin/bash
-GET_GOOSE=0;
-GET_GECO=0;
-GET_VIRUS=0;
+GET_GOOSE=1;
+GET_GECO=1;
+GET_VIRUS=1;
+SPLIT_READS=1;
+RUN_TOP=1;
 #==============================================================================
 # GET GOOSE
 if [[ "$GET_GOOSE" -eq "1" ]]; then
@@ -28,18 +30,30 @@ fi
 if [[ "$GET_VIRUS" -eq "1" ]]; then
   perl DownloadViruses.pl
   cat viruses.fa | tr ' ' '_' \
-  | ./goose-extractreadbypattern complete_genome > VDB.fa
+  | ./goose-extractreadbypattern complete_genome > VDB.mfa
 fi
 #==============================================================================
 # SPLIT READS
-mkdir -p data/
-cp goose-splitreads data/
-cp VDB.fa data/
-cd data/
-./goose-splitreads < VDB.fa
-cd ..
+if [[ "$SPLIT_READS" -eq "1" ]]; then
+  mkdir -p data/
+  cp goose-splitreads data/
+  cp VDB.mfa data/
+  cd data/
+  ./goose-splitreads < VDB.mfa
+  cd ..
+fi
 #==============================================================================
-rm -f TOP;
-./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 20 -g 0.9 data/out$x.fa |
-cat data/out$x.fa | grep ">" >> TOP;
+# RUN TOP
+if [[ "$RUN_TOP" -eq "1" ]]; then
+  rm -f TOP;
+  size=`ls -la out*.fa | wc -l`;
+  for((x=1 ; x<=$size; ++x));
+    do
+    bytes=`./GeCo -v -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 20 -g 0.9 data/out$x.fa | grep "Total bytes" | awk '{ print $16; }'`;
+    name=`cat data/out$x.fa | grep ">"`;
+    printf "%s\t%s\n" "$bytes" "$name" >> TOP
+    done
+  sort -V TOP > SORTED-TOP;
+fi
+#==============================================================================
 
