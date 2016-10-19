@@ -4,23 +4,23 @@
 # WARNING: YOU NEED APPROX. 500 GB OF FREE DISK
 #
 # RUNNING FLAGS
-GET_GOOSE=0;
-GET_GECO=0;
+GET_GOOSE=1;
+GET_GECO=1;
 #==============================================================================
-GET_VIRUS=0;
-GET_BACTERIA=0;
-GET_ARCHAEA=0;
-GET_FUNGI=0;
+GET_VIRUS=1;
+GET_BACTERIA=1;
+GET_ARCHAEA=1;
+GET_FUNGI=1;
 #==============================================================================
-SPLIT_READS_VIRUS=0;
-SPLIT_READS_BACTERIA=0;
-SPLIT_READS_ARCHAEA=0;
-SPLIT_READS_FUNGI=0;
+SPLIT_READS_VIRUS=1;
+SPLIT_READS_BACTERIA=1;
+SPLIT_READS_ARCHAEA=1;
+SPLIT_READS_FUNGI=1;
 #==============================================================================
-RUN_TOP_VIRUS=0;
-RUN_TOP_BACTERIA=0;
-RUN_TOP_ARCHAEA=0;
-RUN_TOP_FUNGI=0;
+RUN_TOP_VIRUS=1;
+RUN_TOP_BACTERIA=1;
+RUN_TOP_ARCHAEA=1;
+RUN_TOP_FUNGI=1;
 #==============================================================================
 RUN_PLOT=1;
 #==============================================================================
