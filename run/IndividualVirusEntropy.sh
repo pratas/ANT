@@ -4,6 +4,7 @@ GET_GECO=1;
 GET_VIRUS=1;
 SPLIT_READS=1;
 RUN_TOP=1;
+RUN_PLOT=1;
 #==============================================================================
 # GET GOOSE
 if [[ "$GET_GOOSE" -eq "1" ]]; then
@@ -58,4 +59,22 @@ if [[ "$RUN_TOP" -eq "1" ]]; then
   sort -V TOP > SORTED-TOP;
 fi
 #==============================================================================
+# PLOT 
+if [[ "$RUN_PLOT" -eq "1" ]]; then
+  gnuplot << EOF
+  set terminal pdfcairo enhanced color
+  set output "virus.pdf"
+  set auto
+  unset key
+  set yrange [0:1.5] 
+  set grid
+  set ylabel "Normalized Relative Compression"
+  set xlabel "Size"
+  plot [0:8330218] "SORTED-TOP" u 1:2 w dots
+EOF
+fi
+#==============================================================================
+
+
+
 
