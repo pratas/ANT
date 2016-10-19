@@ -146,7 +146,7 @@ if [[ "$RUN_TOP_BACTERIA" -eq "1" ]]; then
   size=`ls -la data_bacteria/out*.fa | wc -l`;
   for((x=1 ; x<=$size; ++x));
     do
-    echo "Running virus $x out of $size ...";
+    echo "Running bacteria $x out of $size ...";
     length=`ls -la data_bacteria/out$x.fa | awk '{ print $5}'`;
     bytes=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 20 -g 0.9 data_bacteria/out$x.fa | grep "Total bytes" | awk '{ print $16; }'`;
     name=`cat data_bacteria/out$x.fa | grep ">"`;
@@ -161,7 +161,7 @@ if [[ "$RUN_TOP_ARCHAEA" -eq "1" ]]; then
   size=`ls -la data_archaea/out*.fa | wc -l`;
   for((x=1 ; x<=$size; ++x));
     do
-    echo "Running virus $x out of $size ...";
+    echo "Running archaea $x out of $size ...";
     length=`ls -la data_archaea/out$x.fa | awk '{ print $5}'`;
     bytes=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 20 -g 0.9 data_archaea/out$x.fa | grep "Total bytes" | awk '{ print $16; }'`;
     name=`cat data_archaea/out$x.fa | grep ">"`;
@@ -176,7 +176,7 @@ if [[ "$RUN_TOP_FUNGI" -eq "1" ]]; then
   size=`ls -la data_fungi/out*.fa | wc -l`;
   for((x=1 ; x<=$size; ++x));
     do
-    echo "Running virus $x out of $size ...";
+    echo "Running fungi $x out of $size ...";
     length=`ls -la data_fungi/out$x.fa | awk '{ print $5}'`;
     bytes=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 20 -g 0.9 data_fungi/out$x.fa | grep "Total bytes" | awk '{ print $16; }'`;
     name=`cat data_fungi/out$x.fa | grep ">"`;
