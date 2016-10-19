@@ -66,11 +66,12 @@ if [[ "$RUN_PLOT" -eq "1" ]]; then
   set output "virus.pdf"
   set auto
   unset key
-  set yrange [0:1.5] 
+  set yrange [0.3:1.5] 
+  set logscale x
   set grid
-  set ylabel "Normalized Relative Compression"
+  set ylabel "Normalized Compression"
   set xlabel "Size"
-  plot [0:8330218] "SORTED-TOP" u 1:2 w dots
+  plot [100:8500000] "SORTED-TOP" u 2:1 w dots
 EOF
 fi
 #==============================================================================
