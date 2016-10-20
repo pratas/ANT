@@ -4,25 +4,28 @@
 # WARNING: YOU NEED APPROX. 500 GB OF FREE DISK
 #
 # RUNNING FLAGS
-GET_GOOSE=1;
-GET_GECO=1;
+GET_GOOSE=0;
+GET_GECO=0;
 #==============================================================================
-GET_VIRUS=1;
-GET_BACTERIA=1;
-GET_ARCHAEA=1;
-GET_FUNGI=1;
+GET_VIRUS=0;
+GET_BACTERIA=0;
+GET_ARCHAEA=0;
+GET_FUNGI=0;
 #==============================================================================
-SPLIT_READS_VIRUS=1;
-SPLIT_READS_BACTERIA=1;
-SPLIT_READS_ARCHAEA=1;
-SPLIT_READS_FUNGI=1;
+SPLIT_READS_VIRUS=0;
+SPLIT_READS_BACTERIA=0;
+SPLIT_READS_ARCHAEA=0;
+SPLIT_READS_FUNGI=0;
 #==============================================================================
-RUN_TOP_VIRUS=1;
-RUN_TOP_BACTERIA=1;
-RUN_TOP_ARCHAEA=1;
-RUN_TOP_FUNGI=1;
+RUN_TOP_VIRUS=0;
+RUN_TOP_BACTERIA=0;
+RUN_TOP_ARCHAEA=0;
+RUN_TOP_FUNGI=0;
+#==============================================================================
+RUN_CP=1;
 #==============================================================================
 RUN_PLOT=1;
+RUN_PLOT_CP=1;
 #==============================================================================
 ###############################################################################
 #==============================================================================
@@ -187,21 +190,76 @@ fi
 #==============================================================================
 ###############################################################################
 #==============================================================================
+# BUILD CP
+if [[ "$RUN_CP" -eq "1" ]]; then
+  cat SORTED-TOP-VIRUS    | awk '{print $1*$2"\t"$2"\t"$3}' > SD-CP-VIRUS
+  cat SORTED-TOP-BACTERIA | awk '{print $1*$2"\t"$2"\t"$3}' > SD-CP-BACTERIA
+  cat SORTED-TOP-ARCHAEA  | awk '{print $1*$2"\t"$2"\t"$3}' > SD-CP-ARCHAEA
+  cat SORTED-TOP-FUNGI    | awk '{print $1*$2"\t"$2"\t"$3}' > SD-CP-FUNGI
+  cat SD-CP-VIRUS    | awk 'BEGIN{bits=0;size=0}{bits+=$1;size+=$2} END{print "Virus: "bits/size;}' > RT_VIRUS
+  cat SD-CP-BACTERIA | awk 'BEGIN{bits=0;size=0}{bits+=$1;size+=$2} END{print "Bacteria: "bits/size;}' > RT_BACTERIA
+  cat SD-CP-ARCHAEA  | awk 'BEGIN{bits=0;size=0}{bits+=$1;size+=$2} END{print "Arachaea: "bits/size;}' > RT_ARCHAEA
+  cat SD-CP-FUNGI    | awk 'BEGIN{bits=0;size=0}{bits+=$1;size+=$2} END{print "Fungi: "bits/size;}' > RT_FUNGI
+fi
+#==============================================================================
+###############################################################################
+#==============================================================================
 # PLOT 
 if [[ "$RUN_PLOT" -eq "1" ]]; then
   gnuplot << EOF
   set terminal pdfcairo enhanced color
-  set output "virus.pdf"
+  set output "relative.pdf"
   set auto
-  unset key
+  set key left bottom box
   set yrange [0.3:1.5] 
   set logscale x
   set grid
   set ylabel "Normalized Compression"
   set xlabel "Size"
-  plot [100:10000000] "SORTED-TOP-VIRUS" u 2:1 w dots
+  plot [100:100000000] "SORTED-TOP-VIRUS" u 2:1 w dots title "Virus", \
+  "SORTED-TOP-BACTERIA" u 2:1 w dots title "Bacteria", \
+  "SORTED-TOP-ARCHAEA" u 2:1 w dots title "Archaea", \
+  "SORTED-TOP-FUNGI" u 2:1 w dots title "Fungi"
 EOF
 fi
+#==============================================================================
+# PLOT CP
+if [[ "$RUN_PLOT_CP" -eq "1" ]]; then
+  gnuplot << EOF
+  set terminal pdfcairo enhanced color
+  set output "compression.pdf"
+  set auto
+  set key left top box
+  set yrange [100:100000000] 
+  set logscale x
+  set logscale y
+  set grid
+  set ylabel "Normalized Compression"
+  set xlabel "Size"
+  plot [100:100000000] "SD-CP-VIRUS" u 2:1 w dots title "Virus", \
+  "SD-CP-BACTERIA" u 2:1 w dots title "Bacteria", \
+  "SD-CP-ARCHAEA" u 2:1 w dots title "Archaea", \
+  "SD-CP-FUNGI" u 2:1 w dots title "Fungi"
+EOF
+fi
+###############################################################################
+echo "set terminal pdfcairo enhanced color
+set output 'bytes.pdf'
+set auto
+set boxwidth 0.45
+set xtics nomirror
+set style fill solid 1.00
+set ylabel 'Bytes'
+set xlabel 'Types'
+set yrange[0:1]
+# Lighter grid lines
+set grid ytics lc rgb '#C0C0C0'
+unset key
+set grid
+set format y '%.0s %c'
+set style line 2 lc rgb '#406090'
+plot 'RT_VIRUS' using 2:xtic(1) with boxes ls 2", \
+'RT_VIRUS' using 2:xtic(1) with boxes ls 2",
 #==============================================================================
 ###############################################################################
 #==============================================================================
