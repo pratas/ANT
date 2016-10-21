@@ -257,13 +257,12 @@ if [[ "$RUN_PLOT_CUM" -eq "1" ]]; then
   set xlabel 'Types'
   set yrange[0.8:1]
   set grid ytics lc rgb '#C0C0C0'
+  set style line 1 lc rgb "#3399FF"
+  set style line 2 lc rgb "#008000"
+  set style line 3 lc rgb "#CC0000"
+  set style line 4 lc rgb "#6600CC"
   unset key
   set grid
-  #set style line 2 lc rgb '#406090'
-  set style line 1 lt 1 lc rgb "green"
-  set style line 2 lt 1 lc rgb "red"
-  set style line 3 lt 1 lc rgb "blue"
-  set style line 4 lt 1 lc rgb "pink"
   plot 'TYPE' using 2:xtic(1) with boxes ls 1, \
   'TYPE' using 2:xtic(1) with boxes ls 2, \
   'TYPE' using 2:xtic(1) with boxes ls 3, \
