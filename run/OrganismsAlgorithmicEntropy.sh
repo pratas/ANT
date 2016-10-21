@@ -26,6 +26,7 @@ RUN_CP=1;
 #==============================================================================
 RUN_PLOT=1;
 RUN_PLOT_CP=1;
+RUN_PLOT_CUM=1;
 #==============================================================================
 ###############################################################################
 #==============================================================================
@@ -196,10 +197,10 @@ if [[ "$RUN_CP" -eq "1" ]]; then
   cat SORTED-TOP-BACTERIA | awk '{print $1*$2"\t"$2"\t"$3}' > SD-CP-BACTERIA
   cat SORTED-TOP-ARCHAEA  | awk '{print $1*$2"\t"$2"\t"$3}' > SD-CP-ARCHAEA
   cat SORTED-TOP-FUNGI    | awk '{print $1*$2"\t"$2"\t"$3}' > SD-CP-FUNGI
-  cat SD-CP-VIRUS    | awk 'BEGIN{bits=0;size=0}{bits+=$1;size+=$2} END{print "Virus: "bits/size;}' > RT_VIRUS
-  cat SD-CP-BACTERIA | awk 'BEGIN{bits=0;size=0}{bits+=$1;size+=$2} END{print "Bacteria: "bits/size;}' > RT_BACTERIA
-  cat SD-CP-ARCHAEA  | awk 'BEGIN{bits=0;size=0}{bits+=$1;size+=$2} END{print "Arachaea: "bits/size;}' > RT_ARCHAEA
-  cat SD-CP-FUNGI    | awk 'BEGIN{bits=0;size=0}{bits+=$1;size+=$2} END{print "Fungi: "bits/size;}' > RT_FUNGI
+  cat SD-CP-VIRUS    | awk 'BEGIN{bits=0;size=0}{bits+=$1;size+=$2} END{print "Viruses\t"bits/size;}' > TYPE
+  cat SD-CP-BACTERIA | awk 'BEGIN{bits=0;size=0}{bits+=$1;size+=$2} END{print "Bacteria\t"bits/size;}' >> TYPE
+  cat SD-CP-ARCHAEA  | awk 'BEGIN{bits=0;size=0}{bits+=$1;size+=$2} END{print "Archaea\t"bits/size;}' >> TYPE
+  cat SD-CP-FUNGI    | awk 'BEGIN{bits=0;size=0}{bits+=$1;size+=$2} END{print "Fungi\t"bits/size;}' >> TYPE
 fi
 #==============================================================================
 ###############################################################################
@@ -216,10 +217,10 @@ if [[ "$RUN_PLOT" -eq "1" ]]; then
   set grid
   set ylabel "Normalized Compression"
   set xlabel "Size"
-  plot [100:100000000] "SORTED-TOP-VIRUS" u 2:1 w dots title "Virus", \
-  "SORTED-TOP-BACTERIA" u 2:1 w dots title "Bacteria", \
-  "SORTED-TOP-ARCHAEA" u 2:1 w dots title "Archaea", \
-  "SORTED-TOP-FUNGI" u 2:1 w dots title "Fungi"
+  plot [100:100000000] "SORTED-TOP-VIRUS" u 2:1 w dots linecolor rgb '#3399FF' title "Virus", \
+  "SORTED-TOP-BACTERIA" u 2:1 w dots linecolor rgb '#008000' title "Bacteria", \
+  "SORTED-TOP-ARCHAEA" u 2:1 w dots linecolor rgb '#CC0000' title "Archaea", \
+  "SORTED-TOP-FUNGI" u 2:1 w dots linecolor rgb '#6600CC' title "Fungi"
 EOF
 fi
 #==============================================================================
@@ -242,25 +243,47 @@ if [[ "$RUN_PLOT_CP" -eq "1" ]]; then
   "SD-CP-FUNGI" u 2:1 w dots title "Fungi"
 EOF
 fi
-###############################################################################
-echo "set terminal pdfcairo enhanced color
-set output 'bytes.pdf'
-set auto
-set boxwidth 0.45
-set xtics nomirror
-set style fill solid 1.00
-set ylabel 'Bytes'
-set xlabel 'Types'
-set yrange[0:1]
-# Lighter grid lines
-set grid ytics lc rgb '#C0C0C0'
-unset key
-set grid
-set format y '%.0s %c'
-set style line 2 lc rgb '#406090'
-plot 'RT_VIRUS' using 2:xtic(1) with boxes ls 2", \
-'RT_VIRUS' using 2:xtic(1) with boxes ls 2",
+#==============================================================================
+# PLOT BITS
+if [[ "$RUN_PLOT_CUM" -eq "1" ]]; then
+  gnuplot << EOF
+  set terminal pdfcairo enhanced color
+  set output 'cumulative.pdf'
+  set auto
+  set boxwidth 0.45
+  set xtics nomirror
+  set style fill solid 1.00
+  set ylabel 'Normalized Cumulative Compression'
+  set xlabel 'Types'
+  set yrange[0.8:1]
+  set grid ytics lc rgb '#C0C0C0'
+  unset key
+  set grid
+  #set style line 2 lc rgb '#406090'
+  set style line 1 lt 1 lc rgb "green"
+  set style line 2 lt 1 lc rgb "red"
+  set style line 3 lt 1 lc rgb "blue"
+  set style line 4 lt 1 lc rgb "pink"
+  plot 'TYPE' using 2:xtic(1) with boxes ls 1, \
+  'TYPE' using 2:xtic(1) with boxes ls 2, \
+  'TYPE' using 2:xtic(1) with boxes ls 3, \
+  'TYPE' using 2:xtic(1) with boxes ls 4
+EOF
+fi
 #==============================================================================
 ###############################################################################
 #==============================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
 
