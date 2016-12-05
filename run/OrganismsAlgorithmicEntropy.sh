@@ -39,8 +39,9 @@ if [[ "$GET_GOOSE" -eq "1" ]]; then
   git clone https://github.com/pratas/goose.git
   cd goose/src/
   make
-  cp goose-* ../../
   cd ../../
+  cp goose/src/goose-* .
+  cp goose/scripts/Download*.pl .
 fi
 #==============================================================================
 # GET GECO
