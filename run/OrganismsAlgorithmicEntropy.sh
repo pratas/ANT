@@ -160,7 +160,12 @@ if [[ "$RUN_TOP_VIRUS" -eq "1" ]]; then
     length=`ls -la data_virus/out$x.fa | awk '{ print $5}'`;
     bytes=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 20 -g 0.9 data_virus/out$x.fa | grep "Total bytes" | awk '{ print $16; }'`;
     name=`cat data_virus/out$x.fa | grep ">"`;
-    printf "%s\t%s\t%s\n" "$bytes" "$length" "$name" >> TOP-VIRUS;
+    decision=`echo "$bytes > 1.0" | bc`;
+    if [[ "$decision" -eq "1" ]]; then
+      printf "%s\t%s\t%s\n" "1.0" "$length" "$name" >> TOP-VIRUS;
+    else
+      printf "%s\t%s\t%s\n" "$bytes" "$length" "$name" >> TOP-VIRUS;
+    fi
     done
   sort -V TOP-VIRUS > SORTED-TOP-VIRUS;
 fi
@@ -175,7 +180,12 @@ if [[ "$RUN_TOP_BACTERIA" -eq "1" ]]; then
     length=`ls -la data_bacteria/out$x.fa | awk '{ print $5}'`;
     bytes=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 30 -g 0.9 data_bacteria/out$x.fa | grep "Total bytes" | awk '{ print $16; }'`;
     name=`cat data_bacteria/out$x.fa | grep ">"`;
-    printf "%s\t%s\t%s\n" "$bytes" "$length" "$name" >> TOP-BACTERIA;
+    decision=`echo "$bytes > 1.0" | bc`;
+    if [[ "$decision" -eq "1" ]]; then
+      printf "%s\t%s\t%s\n" "1.0" "$length" "$name" >> TOP-BACTERIA;
+    else
+      printf "%s\t%s\t%s\n" "$bytes" "$length" "$name" >> TOP-BACTERIA;
+    fi
     done
   sort -V TOP-BACTERIA > SORTED-TOP-BACTERIA;
 fi
@@ -190,7 +200,12 @@ if [[ "$RUN_TOP_ARCHAEA" -eq "1" ]]; then
     length=`ls -la data_archaea/out$x.fa | awk '{ print $5}'`;
     bytes=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 30 -g 0.9 data_archaea/out$x.fa | grep "Total bytes" | awk '{ print $16; }'`;
     name=`cat data_archaea/out$x.fa | grep ">"`;
-    printf "%s\t%s\t%s\n" "$bytes" "$length" "$name" >> TOP-ARCHAEA;
+    decision=`echo "$bytes > 1.0" | bc`;
+    if [[ "$decision" -eq "1" ]]; then
+      printf "%s\t%s\t%s\n" "1.0" "$length" "$name" >> TOP-ARCHAEA;
+    else
+      printf "%s\t%s\t%s\n" "$bytes" "$length" "$name" >> TOP-ARCHAEA;
+    fi
     done
   sort -V TOP-ARCHAEA > SORTED-TOP-ARCHAEA;
 fi
@@ -205,7 +220,12 @@ if [[ "$RUN_TOP_FUNGI" -eq "1" ]]; then
     length=`ls -la data_fungi/out$x.fa | awk '{ print $5}'`;
     bytes=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 30 -g 0.9 data_fungi/out$x.fa | grep "Total bytes" | awk '{ print $16; }'`;
     name=`cat data_fungi/out$x.fa | grep ">"`;
-    printf "%s\t%s\t%s\n" "$bytes" "$length" "$name" >> TOP-FUNGI;
+    decision=`echo "$bytes > 1.0" | bc`;
+    if [[ "$decision" -eq "1" ]]; then
+      printf "%s\t%s\t%s\n" "1.0" "$length" "$name" >> TOP-FUNGI;
+    else
+      printf "%s\t%s\t%s\n" "$bytes" "$length" "$name" >> TOP-FUNGI;
+    fi
     done
   sort -V TOP-FUNGI > SORTED-TOP-FUNGI;
 fi
@@ -220,7 +240,12 @@ if [[ "$RUN_TOP_PLANTS" -eq "1" ]]; then
     length=`ls -la data_plants/out$x.fa | awk '{ print $5}'`;
     bytes=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 30 -g 0.9 data_plants/out$x.fa | grep "Total bytes" | awk '{ print $16; }'`;
     name=`cat data_plants/out$x.fa | grep ">"`;
-    printf "%s\t%s\t%s\n" "$bytes" "$length" "$name" >> TOP-PLANTS;
+    decision=`echo "$bytes > 1.0" | bc`;
+    if [[ "$decision" -eq "1" ]]; then
+      printf "%s\t%s\t%s\n" "1.0" "$length" "$name" >> TOP-PLANTS;
+    else
+      printf "%s\t%s\t%s\n" "$bytes" "$length" "$name" >> TOP-PLANTS;
+    fi
     done
   sort -V TOP-PLANTS > SORTED-TOP-PLANTS;
 fi
@@ -250,7 +275,7 @@ if [[ "$RUN_PLOT" -eq "1" ]]; then
   set output "relative.pdf"
   set auto
   set key left bottom box
-  set yrange [0.3:1.5] 
+  set yrange [0.3:1.1] 
   set logscale x
   set grid
   set ylabel "Normalized Compression"
@@ -293,7 +318,7 @@ if [[ "$RUN_PLOT_CUM" -eq "1" ]]; then
   set boxwidth 0.45
   set xtics nomirror
   set style fill solid 1.00
-  set ylabel 'Normalized Cumulative Compression'
+  set ylabel 'Normalized Compression'
   set xlabel 'Types'
   set yrange[0.8:1]
   set grid ytics lc rgb '#C0C0C0'
