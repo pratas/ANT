@@ -284,7 +284,7 @@ if [[ "$RUN_PLOT" -eq "1" ]]; then
   "SORTED-TOP-BACTERIA" u 2:1 w dots linecolor rgb '#008000' title "Bacteria", \
   "SORTED-TOP-ARCHAEA" u 2:1 w dots linecolor rgb '#CC0000' title "Archaea", \
   "SORTED-TOP-FUNGI" u 2:1 w dots linecolor rgb '#6600CC' title "Fungi", \
-  "SORTED-TOP-PLANTS" u 2:1 w dots linecolor rgb '#3300CC' title "Plants"
+  "SORTED-TOP-PLANTS" u 2:1 w dots linecolor rgb '#B8860B' title "Plants"
 EOF
 fi
 #==============================================================================
