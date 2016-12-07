@@ -45,30 +45,29 @@ fi
 #==============================================================================
 # RUN XS
 if [[ "$RUN_XS" -eq "1" ]]; then
-  ./XS -v -ls 100 -n 150 -eh -eo -es -edb -f 0.25,0.25,0.25,0.25,0.0 -rn 0 -rm 0 -s 0 X1;
+  ./XS -v -ls 100 -n 1400 -eh -eo -es -edb -f 0.25,0.25,0.25,0.25,0.0 -rn 0 -rm 0 -s 0 X1;
   ./goose-mutatedna -mr 0.10 < X1 > X2;
-  ./XS -v -ls 100 -n 100 -eh -eo -es -edb -f 0.25,0.25,0.25,0.25,0.0 -rn 0 -rm 0 -s 11 X3;
+  ./XS -v -ls 100 -n 1000 -eh -eo -es -edb -f 0.25,0.25,0.25,0.25,0.0 -rn 0 -rm 0 -s 11 X3;
   ./goose-mutatedna -mr 0.01 < X3 > X4;
   cp X4 X5;
-  ./XS -v -ls 100 -n 200 -eh -eo -es -edb -f 0.25,0.25,0.25,0.25,0.0 -rn 0 -rm 0 -s 101 X6;
+  ./XS -v -ls 100 -n 1200 -eh -eo -es -edb -f 0.25,0.25,0.25,0.25,0.0 -rn 0 -rm 0 -s 101 X6;
   cat X5 X6 > X7;
-  cat X1 X2 X3 X7 > X8;
 fi
 #==============================================================================
 # RUN GECO
 if [[ "$RUN_GECO" -eq "1" ]]; then
-  for((x=1 ; x<=8 ; ++x)); do  #8! = 40320 combinations
-    for((y=1 ; y<=8 ; ++y)); do  #8! = 40320 combinations
-      for((z=1 ; z<=8 ; ++z)); do  #8! = 40320 combinations
-      echo "ID $x:$y:$z:";
-      XZ=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 18:20:1:2/10 -c 30 -g 0.9 X$x:X$z | grep "Total bytes" | awk '{ print $3}'`;
-      YZ=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 18:20:1:2/10 -c 30 -g 0.9 X$y:X$z | grep "Total bytes" | awk '{ print $3}'`;
-      XY=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 18:20:1:2/10 -c 30 -g 0.9 X$x:X$y | grep "Total bytes" | awk '{ print $3}'`;
-      Z=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 18:20:1:2/10 -c 30 -g 0.9 X$z | grep "Total bytes" | awk '{ print $3}'`;
-      if [[ (($XZ+$YZ)) -lt (($XY+$Z))  ]]; then
-        echo "INVALID!";
-        exit;
-      fi
+  for((x=1 ; x<=7 ; ++x)); do  #7! = 720 combinations
+    for((y=1 ; y<=7 ; ++y)); do  #8! = 40320 combinations
+      for((z=1 ; z<=7 ; ++z)); do  
+        echo "ID $x:$y:$z:";
+        XZ=`./GeCo -tm 18:20:0:0/10 -c 5 -g 0.9 X$x:X$z | grep "Total bytes" | awk '{ print $3}'`;
+        YZ=`./GeCo -tm 18:20:0:0/10 -c 5 -g 0.9 X$y:X$z | grep "Total bytes" | awk '{ print $3}'`;
+        XY=`./GeCo -tm 18:20:0:0/10 -c 5 -g 0.9 X$x:X$y | grep "Total bytes" | awk '{ print $3}'`;
+        Z=`./GeCo  -tm 18:20:0:0/10 -c 5 -g 0.9 X$z | grep "Total bytes" | awk '{ print $3}'`;
+        if [[ "$(($XZ+$YZ))" -lt "$(($XY+$Z))"  ]]; then
+          echo "INVALID!";
+          exit;
+        fi
       done
     done
   done
