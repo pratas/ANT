@@ -4,26 +4,26 @@
 # WARNING: YOU NEED APPROX. 500 GB OF FREE DISK
 #
 # RUNNING FLAGS
-GET_GOOSE=0;
-GET_GECO=0;
+GET_GOOSE=1;
+GET_GECO=1;
 #==============================================================================
-GET_VIRUS=0;
-GET_BACTERIA=0;
-GET_ARCHAEA=0;
-GET_FUNGI=0;
-GET_PLANTS=0;
+GET_VIRUS=1;
+GET_BACTERIA=1;
+GET_ARCHAEA=1;
+GET_FUNGI=1;
+GET_PLANTS=1;
 #==============================================================================
-SPLIT_READS_VIRUS=0;
-SPLIT_READS_BACTERIA=0;
-SPLIT_READS_ARCHAEA=0;
-SPLIT_READS_FUNGI=0;
-SPLIT_READS_PLANTS=0;
+SPLIT_READS_VIRUS=1;
+SPLIT_READS_BACTERIA=1;
+SPLIT_READS_ARCHAEA=1;
+SPLIT_READS_FUNGI=1;
+SPLIT_READS_PLANTS=1;
 #==============================================================================
-RUN_TOP_VIRUS=0;
-RUN_TOP_BACTERIA=0;
-RUN_TOP_ARCHAEA=0;
-RUN_TOP_FUNGI=0;
-RUN_TOP_PLANTS=0;
+RUN_TOP_VIRUS=1;
+RUN_TOP_BACTERIA=1;
+RUN_TOP_ARCHAEA=1;
+RUN_TOP_FUNGI=1;
+RUN_TOP_PLANTS=1;
 #==============================================================================
 RUN_CP=1;
 #==============================================================================
@@ -160,7 +160,7 @@ if [[ "$RUN_TOP_VIRUS" -eq "1" ]]; then
     length=`ls -la data_virus/out$x.fa | awk '{ print $5}'`;
     bytes=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 20 -g 0.9 data_virus/out$x.fa | grep "Total bytes" | awk '{ print $16; }'`;
     name=`cat data_virus/out$x.fa | grep ">"`;
-    decision=`echo "$bytes > 1.0" | bc`;
+    decision=`echo "$bytes > 1.0" | bc -l`;
     if [[ "$decision" -eq "1" ]]; then
       printf "%s\t%s\t%s\n" "1.0" "$length" "$name" >> TOP-VIRUS;
     else
@@ -172,7 +172,7 @@ fi
 #==============================================================================
 # RUN TOP BACTERIA
 if [[ "$RUN_TOP_BACTERIA" -eq "1" ]]; then
-  rm -f TOP-VIRUS_BACTERIA;
+  rm -f TOP-BACTERIA;
   size=`ls -la data_bacteria/out*.fa | wc -l`;
   for((x=1 ; x<=$size; ++x));
     do
@@ -180,7 +180,7 @@ if [[ "$RUN_TOP_BACTERIA" -eq "1" ]]; then
     length=`ls -la data_bacteria/out$x.fa | awk '{ print $5}'`;
     bytes=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 30 -g 0.9 data_bacteria/out$x.fa | grep "Total bytes" | awk '{ print $16; }'`;
     name=`cat data_bacteria/out$x.fa | grep ">"`;
-    decision=`echo "$bytes > 1.0" | bc`;
+    decision=`echo "$bytes > 1.0" | bc -l`;
     if [[ "$decision" -eq "1" ]]; then
       printf "%s\t%s\t%s\n" "1.0" "$length" "$name" >> TOP-BACTERIA;
     else
@@ -192,7 +192,7 @@ fi
 #==============================================================================
 # RUN TOP ARACHAEA
 if [[ "$RUN_TOP_ARCHAEA" -eq "1" ]]; then
-  rm -f TOP-VIRUS_ARCHAEA;
+  rm -f TOP-ARCHAEA;
   size=`ls -la data_archaea/out*.fa | wc -l`;
   for((x=1 ; x<=$size; ++x));
     do
@@ -200,7 +200,7 @@ if [[ "$RUN_TOP_ARCHAEA" -eq "1" ]]; then
     length=`ls -la data_archaea/out$x.fa | awk '{ print $5}'`;
     bytes=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 30 -g 0.9 data_archaea/out$x.fa | grep "Total bytes" | awk '{ print $16; }'`;
     name=`cat data_archaea/out$x.fa | grep ">"`;
-    decision=`echo "$bytes > 1.0" | bc`;
+    decision=`echo "$bytes > 1.0" | bc -l`;
     if [[ "$decision" -eq "1" ]]; then
       printf "%s\t%s\t%s\n" "1.0" "$length" "$name" >> TOP-ARCHAEA;
     else
@@ -212,7 +212,7 @@ fi
 #==============================================================================
 # RUN TOP FUNGI
 if [[ "$RUN_TOP_FUNGI" -eq "1" ]]; then
-  rm -f TOP-VIRUS_FUNGI;
+  rm -f TOP-FUNGI;
   size=`ls -la data_fungi/out*.fa | wc -l`;
   for((x=1 ; x<=$size; ++x));
     do
@@ -220,7 +220,7 @@ if [[ "$RUN_TOP_FUNGI" -eq "1" ]]; then
     length=`ls -la data_fungi/out$x.fa | awk '{ print $5}'`;
     bytes=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 30 -g 0.9 data_fungi/out$x.fa | grep "Total bytes" | awk '{ print $16; }'`;
     name=`cat data_fungi/out$x.fa | grep ">"`;
-    decision=`echo "$bytes > 1.0" | bc`;
+    decision=`echo "$bytes > 1.0" | bc -l`;
     if [[ "$decision" -eq "1" ]]; then
       printf "%s\t%s\t%s\n" "1.0" "$length" "$name" >> TOP-FUNGI;
     else
@@ -232,7 +232,7 @@ fi
 #==============================================================================
 # RUN TOP PLANTS
 if [[ "$RUN_TOP_PLANTS" -eq "1" ]]; then
-  rm -f TOP-VIRUS_PLANTS;
+  rm -f TOP-PLANTS;
   size=`ls -la data_plants/out*.fa | wc -l`;
   for((x=1 ; x<=$size; ++x));
     do
@@ -240,7 +240,7 @@ if [[ "$RUN_TOP_PLANTS" -eq "1" ]]; then
     length=`ls -la data_plants/out$x.fa | awk '{ print $5}'`;
     bytes=`./GeCo -tm 4:1:0:0/0 -tm 6:1:1:0/0 -tm 13:20:1:0/0 -tm 16:20:1:2/10 -c 30 -g 0.9 data_plants/out$x.fa | grep "Total bytes" | awk '{ print $16; }'`;
     name=`cat data_plants/out$x.fa | grep ">"`;
-    decision=`echo "$bytes > 1.0" | bc`;
+    decision=`echo "$bytes > 1.0" | bc -l`;
     if [[ "$decision" -eq "1" ]]; then
       printf "%s\t%s\t%s\n" "1.0" "$length" "$name" >> TOP-PLANTS;
     else
@@ -318,9 +318,9 @@ if [[ "$RUN_PLOT_CUM" -eq "1" ]]; then
   set boxwidth 0.45
   set xtics nomirror
   set style fill solid 1.00
-  set ylabel 'Normalized Compression'
+  set ylabel 'Normalized Cumulative Compression'
   set xlabel 'Types'
-  set yrange[0.8:1]
+  set yrange[0.8:1.1]
   set grid ytics lc rgb '#C0C0C0'
   set style line 1 lc rgb "#3399FF"
   set style line 2 lc rgb "#008000"
@@ -339,17 +339,4 @@ fi
 #==============================================================================
 ###############################################################################
 #==============================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
 
