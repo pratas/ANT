@@ -59,13 +59,13 @@ if [[ "$RUN_GECO" -eq "1" ]]; then
   for((x=1 ; x<=7 ; ++x)); do  #7! = 720 combinations
     for((y=1 ; y<=7 ; ++y)); do  #8! = 40320 combinations
       for((z=1 ; z<=7 ; ++z)); do  
-        echo "ID $x:$y:$z:";
+        echo "ID $x:$y:$z";
         XZ=`./GeCo -tm 18:20:0:0/10 -c 5 -g 0.9 X$x:X$z | grep "Total bytes" | awk '{ print $3}'`;
         YZ=`./GeCo -tm 18:20:0:0/10 -c 5 -g 0.9 X$y:X$z | grep "Total bytes" | awk '{ print $3}'`;
         XY=`./GeCo -tm 18:20:0:0/10 -c 5 -g 0.9 X$x:X$y | grep "Total bytes" | awk '{ print $3}'`;
         Z=`./GeCo  -tm 18:20:0:0/10 -c 5 -g 0.9 X$z | grep "Total bytes" | awk '{ print $3}'`;
         if [[ "$(($XZ+$YZ))" -lt "$(($XY+$Z))"  ]]; then
-          echo "INVALID!";
+          echo "INVALID: it does not respect the distributivity property!";
           exit;
         fi
       done
